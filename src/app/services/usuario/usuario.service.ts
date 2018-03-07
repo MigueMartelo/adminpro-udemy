@@ -5,6 +5,7 @@ import { URL_SERVICIOS } from '../../config/config';
 import { Router } from '@angular/router';
 
 import 'rxjs/add/operator/map';
+import { SubirArchivosService } from '../services.index';
 
 declare var swal: any;
 
@@ -14,20 +15,21 @@ export class UsuarioService {
   usuario: Usuario;
   token: string;
 
-  constructor( 
+  constructor(
     public http: HttpClient,
-    public _router: Router
-  ){
-  	this.cargarStorage();
+    public _router: Router,
+    public _subirArchivoService: SubirArchivosService
+  ) {
+    this.cargarStorage();
   }
 
   estaLogueado() {
     return (this.token.length > 5) ? true : false;
   }
 
-  cargarStorage(){
+  cargarStorage() {
 
-    if (localStorage.getItem('token')){
+    if (localStorage.getItem('token')) {
       this.token = localStorage.getItem('token');
       this.usuario = JSON.parse( localStorage.getItem('usuario') );
     } else {
@@ -36,7 +38,7 @@ export class UsuarioService {
     }
   }
 
-  guardarStorage(id:string, token:string, usuario:Usuario){
+  guardarStorage(id: string, token: string, usuario: Usuario) {
     localStorage.setItem('id', id);
     localStorage.setItem('token', token);
     localStorage.setItem('usuario', JSON.stringify(usuario) );
@@ -45,7 +47,7 @@ export class UsuarioService {
     this.token = token;
   }
 
-  logOut(){
+  logOut() {
     this.usuario = null;
     this.token = '';
 
@@ -56,26 +58,26 @@ export class UsuarioService {
 
   }
 
-  loginGoogle( token: string ){
+  loginGoogle( token: string ) {
 
-    let url = URL_SERVICIOS + '/login/google';
+    const url = URL_SERVICIOS + '/login/google';
 
     return this.http.post(url, {token})
-                .map( (resp:any) => {
+                .map( (resp: any) => {
                   this.guardarStorage(resp.id, resp.token, resp.usuario);
                   return true;
                 });
   }
 
-  login( usuario: Usuario, recordar: boolean = false ){
+  login( usuario: Usuario, recordar: boolean = false ) {
 
-    if (recordar){
+    if (recordar) {
       localStorage.setItem('email', usuario.email);
     } else {
       localStorage.removeItem('email');
     }
 
-    let url = URL_SERVICIOS + '/login';
+    const url = URL_SERVICIOS + '/login';
 
     return this.http.post(url, usuario)
                 .map( (resp: any) => {
@@ -84,16 +86,46 @@ export class UsuarioService {
                 });
   }
 
-  crearUsuario( usuario: Usuario){
-  	let url = URL_SERVICIOS + '/usuario';
+  crearUsuario( usuario: Usuario) {
+    const url = URL_SERVICIOS + '/usuario';
 
-  	return this.http.post(url, usuario)
-  				.map( (resp: any) => {
-  					swal('Usuario creado ', usuario.email, ' success');
-  					return resp.usuario;
-  				});
+    return this.http.post(url, usuario)
+          .map( (resp: any) => {
+              swal('Usuario creado ', usuario.email, ' success');
+              return resp.usuario;
+          });
   }
 
+  actualizarUsuario( usuario: Usuario ) {
+
+    let url = URL_SERVICIOS + '/usuario/' + usuario._id;
+    url += '?token=' + this.token;
+
+    return this.http.put( url, usuario )
+                .map( (resp: any) => {
+
+                  let usuarioDB: Usuario = resp.usuario;
+
+                  this.guardarStorage(usuarioDB._id, this.token, usuarioDB);
+                  swal('Usuario actualizado', usuario.nombre, 'success');
+
+                  return true;
+                });
+  }
+
+  cambiarImagen(file: File, id: string) {
+
+    this._subirArchivoService.subirArchivo(file, 'usuarios', id)
+          .then( (resp: any) => {
+            this.usuario.img = resp.usuario.imag;
+            swal('Imagen actualizada', this.usuario.nombre, 'success');
+            this.guardarStorage(id, this.token, this.usuario);
+          })
+          .catch( resp => {
+            console.log(resp);
+          });
+
+  }
 
 
 }
