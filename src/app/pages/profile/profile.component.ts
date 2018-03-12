@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../models/usuario.model';
 import { UsuarioService } from '../../services/services.index';
 
+declare var swal: any;
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',

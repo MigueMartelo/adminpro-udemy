@@ -27,7 +27,7 @@ import { PipesModule } from '../pipes/pipes.module';
 		BreadcrumbsComponent,
 		HeaderComponent,
 		NopagefoundComponent,
-		SidebarComponent	
+		SidebarComponent
 	]
 })
 
