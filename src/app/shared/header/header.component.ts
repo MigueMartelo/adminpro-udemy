@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-	usuario: Usuario;
+  usuario: Usuario;
 
   constructor(
     public _usuarioService: UsuarioService,
@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-  	this.usuario = this._usuarioService.usuario;
+    this.usuario = this._usuarioService.usuario;
   }
 
   buscar(termino: string) {
