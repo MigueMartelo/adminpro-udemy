@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { UsuarioService } from '../usuario/usuario.service';
 
@@ -8,15 +8,18 @@ export class AdminGuard implements CanActivate {
 
   constructor(
     public _usuarioService: UsuarioService
-  ) {}
+  ) { }
 
   canActivate() {
-    if(this._usuarioService.usuario.role === 'ADMIN_ROLE') {
+
+    if ( this._usuarioService.usuario.role === 'ADMIN_ROLE' ) {
       return true;
-    } else {
-      console.log('Bloqueado por el AdminGuard');
-      this._usuarioService.logOut();
+    }else {
+      console.log( 'Bloqueado por el ADMIN GUARD');
+      this._usuarioService.logout();
       return false;
     }
+
   }
+
 }

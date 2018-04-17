@@ -1,11 +1,12 @@
+import { NgForm } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { UsuarioService } from '../services/services.index';
+import { UsuarioService } from '../services/service.index';
 import { Usuario } from '../models/usuario.model';
 
 declare function init_plugins();
 declare const gapi: any;
+
 
 @Component({
   selector: 'app-login',
@@ -20,60 +21,65 @@ export class LoginComponent implements OnInit {
   auth2: any;
 
   constructor(
-    public _router:Router, 
-    public userService: UsuarioService
+    public router: Router,
+    public _usuarioService: UsuarioService
   ) { }
 
   ngOnInit() {
-  	init_plugins();
+    init_plugins();
     this.googleInit();
 
     this.email = localStorage.getItem('email') || '';
-    if(this.email.length > 1){
+    if ( this.email.length > 1 ) {
       this.recuerdame = true;
     }
+
   }
 
-  googleInit(){
+  googleInit() {
 
     gapi.load('auth2', () => {
+
       this.auth2 = gapi.auth2.init({
-        client_id: '661332995109-dgfdbklnveibfngk829sbd6cfmknta8r.apps.googleusercontent.com',
+        client_id: '442737206823-dilej5tevnrv61sovd7bocf5qeafmjs3.apps.googleusercontent.com',
         cookiepolicy: 'single_host_origin',
         scope: 'profile email'
       });
 
-      this.attachSignin(document.getElementById('btnGoogle'));
+      this.attachSignin( document.getElementById('btnGoogle') );
 
     });
 
   }
 
-  attachSignin( element ){
+  attachSignin( element ) {
 
-    this.auth2.attachClickHandler(element, {}, (googleUser) => {
-      //let profile = googleUser.getBasicProfile();
+    this.auth2.attachClickHandler( element, {}, (googleUser) => {
+
+      // let profile = googleUser.getBasicProfile();
       let token = googleUser.getAuthResponse().id_token;
 
-      this.userService.loginGoogle(token)
-          .subscribe( () => window.location.href = '#/dashboard' );
+      this._usuarioService.loginGoogle( token )
+              .subscribe( () => window.location.href = '#/dashboard'  );
 
     });
 
   }
 
-  ingresar(forma: NgForm){
 
-    if(forma.invalid){
+  ingresar( forma: NgForm) {
+
+    if ( forma.invalid ) {
       return;
     }
 
-    let usuario = new Usuario(null, forma.value.email, forma.value.password);
+    let usuario = new Usuario(null, forma.value.email, forma.value.password );
 
-    this.userService.login(usuario, forma.value.recuerdame)
-                .subscribe( correcto => this._router.navigate(['/dashboard']) );
+    this._usuarioService.login( usuario, forma.value.recuerdame )
+                  .subscribe( correcto => this.router.navigate(['/dashboard'])  );
 
-  	//this._router.navigate(['/dashboard']);
+    // this.router.navigate([ '/dashboard' ]);
+
   }
 
 }

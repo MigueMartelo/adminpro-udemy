@@ -5,7 +5,7 @@ Email: niravjoshi87@gmail.com
 File: js
 */
 
-function init_plugins(){
+function init_plugins() {
 
     $(function() {
         "use strict";
@@ -49,12 +49,12 @@ function init_plugins(){
                 $("body").trigger("resize");
                 $("body").removeClass("mini-sidebar");
                 $('.navbar-brand span').show();
-                
+
             } else {
                 $("body").trigger("resize");
                 $("body").addClass("mini-sidebar");
                 $('.navbar-brand span').hide();
-                
+
             }
         });
 
@@ -103,17 +103,17 @@ function init_plugins(){
         //tooltip
         // ============================================================== 
         $(function() {
-            $('[data-toggle="tooltip"]').tooltip()
-        })
-        // ============================================================== 
-        //Popover
-        // ============================================================== 
+                $('[data-toggle="tooltip"]').tooltip()
+            })
+            // ============================================================== 
+            //Popover
+            // ============================================================== 
         $(function() {
-            $('[data-toggle="popover"]').popover()
-        })
-        // ============================================================== 
-        // Sidebarmenu
-        // ============================================================== 
+                $('[data-toggle="popover"]').popover()
+            })
+            // ============================================================== 
+            // Sidebarmenu
+            // ============================================================== 
         $(function() {
             $('#sidebarnav').AdminMenu();
         });
@@ -122,7 +122,7 @@ function init_plugins(){
         // Perfact scrollbar
         // ============================================================== 
         $('.scroll-sidebar, .right-side-panel, .message-center, .right-sidebar').perfectScrollbar();
-        
+
         // ============================================================== 
         // Resize all elements
         // ============================================================== 
@@ -134,7 +134,7 @@ function init_plugins(){
             $(this).toggleClass("task-done");
         });
 
-        
+
 
         // ============================================================== 
         // Collapsable cards
@@ -158,6 +158,10 @@ function init_plugins(){
         });
 
     });
+
+
+
+
 
 
 }

@@ -14,7 +14,8 @@ declare function init_plugins();
     .error-box .footer {
       width: 100%;
       left: 0px;
-      right: 0px; }  
+      right: 0px;
+    }
   .error-body {
     padding-top: 5%; }
     .error-body h1 {
@@ -31,7 +32,7 @@ export class NopagefoundComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-  	init_plugins();
+    init_plugins();
   }
 
 }
